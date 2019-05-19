@@ -1,0 +1,125 @@
+<div class="row">
+	<div class="col-xs-12">
+		<div class="box">
+			<div class="box-header">
+				<h3 class="box-title">鏃ュ織绠＄悊</h3>
+
+				<div class="box-tools">
+					<div class="input-group input-group-sm" style="width: 350px;">
+						<input type="text" name="table_search" id="searchNameId"
+							class="form-control pull-right" placeholder="鐢ㄦ埛鍚�">
+
+						<div class="input-group-btn">
+							<button type="button" class="btn btn-default btn-search">
+                                <i class="fa fa-search"></i>
+							</button>
+							<button type="button" class="btn btn-default btn-delete">鍒犻櫎</button>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- /.box-header -->
+			<div class="box-body table-responsive no-padding">
+				<table class="table table-hover">
+					<thead>
+						<tr>
+						    <th><input type="checkbox" id="checkAll">鍏ㄩ��</th>
+							<th>鐢ㄦ埛鍚�</th>
+							<th>鎿嶄綔</th>
+							<th>璇锋眰鏂规硶</th>
+							<th>璇锋眰鍙傛暟</th>
+							<th>IP鍦板潃</th>
+							<th>鎵ц鏃堕棿</th>
+						</tr>
+					</thead>
+					<tbody id="tbodyId">
+					    <tr>
+					       <td colspan="7">鏁版嵁鍔犺浇涓�...</td>
+					    </tr>
+					</tbody>
+				</table>
+			</div>
+			<div id="pageId" class="box-footer clearfix">
+			      
+			</div>
+			<!-- /.box-body -->
+		</div>
+		<!-- /.box -->
+	</div>
+</div>
+<script type="text/javascript">
+ 
+ $(function(){
+	 $("#pageId").load("doPageUI.do",function(){
+	 		doGetObjects();
+	 	})
+	 	
+	function doGetObjects() {
+		 var url = "log/doFindPageObjects.do";
+		 
+		 var pageCurrent = $("#pageId").data("pageCurrent");
+		 if(!pageCurrent) pageCurrent = 1;
+		var params = {"pageCurrent":pageCurrent};
+		
+		
+		
+		
+		$.getJSON(url,params,function(result){
+			
+			doHandleResponseResult(result);
+		})
+	 }
+	 
+	 
+	 function doHandleResponseResult(result) {
+		 
+		 if(result.state==1) {
+			 doSetTableBodyRows(result.data.records);
+			 doSetPagination(result.data);
+		 }else {
+			 alert(result.msg);
+		 }
+	 }
+	 
+	 
+	 function doSetTableBodyRows(records) {
+		 var tBody = ("#tbodyId");
+		 tBody.empty();
+		 for(i = 0; i< records.length; i++) {
+			 //2.1 构建tr对象
+			   var tr=$("<tr></tr>");
+			   //2.2 构建tds对象
+			   var tds=doCreateTds(records[i]);
+			   //2.3 将tds追加到tr中
+			   tr.append(tds);
+			   //2.4 将tr追加到tbody中
+			   tBody.append(tr);
+		 }
+	 }
+	 
+	 
+	 function doCreateTds(data) {
+		 var tds="<td><input type='checkbox' class='cBox' name='cItem' value='"+data.id+"'></td>"+
+	   	 "<td>"+data.username+"</td>"+
+	     "<td>"+data.operation+"</td>"+
+	     "<td>"+data.method+"</td>"+
+	     "<td>"+data.params+"</td>"+
+	     "<td>"+data.ip+"</td>"+
+	     "<td>"+data.time+"</td>";	   
+return tds;
+	 }
+ })
+ 	
+   
+</script>
+
+
+
+
+
+
+
+
+
+
+
